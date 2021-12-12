@@ -37,4 +37,53 @@ fn main() {
     // println!("random word: {}", secret_word);
 
     // Your code here! :)
+    let word_len = secret_word.len();
+    let mut word_so_far_chars: Vec<char> = Vec::new();
+    for _ in 0..word_len {
+        word_so_far_chars.push('-');
+    }
+    let mut guess_so_far_chars: Vec<char> = Vec::new();
+
+    println!("Welcome to CS110L Hangman!");
+
+    let mut incorrent_guess: u32 = 0;
+    let mut corrent_chars: usize = 0;
+    while incorrent_guess < NUM_INCORRECT_GUESSES {
+
+        if corrent_chars == word_len {
+            println!("Congratulations you guessed the secret word: {}!", secret_word);
+            return;
+        }
+        println!("The word so far is {}", word_so_far_chars.iter().collect::<String>());
+        println!("You have guessed the following letters: {}", guess_so_far_chars.iter().collect::<String>());
+        println!("You have {} guesses left", NUM_INCORRECT_GUESSES - incorrent_guess);
+        print!("Please guess a letter: ");
+
+        // get input from stdin
+        let mut buffer = String::new();
+        let _ = io::stdout().flush().expect("Flushing error");
+        io::stdin().read_line(&mut buffer).expect("Did not enter a correct string");
+        // get input char
+        let input_char = buffer.chars().nth(0).expect("");
+        guess_so_far_chars.push(input_char);
+
+        let mut is_correct = false;
+
+        for i in 0..word_len {
+            if secret_word_chars[i] == input_char {
+                is_correct = true;
+                corrent_chars += 1;
+                word_so_far_chars[i] = input_char;
+            }
+        }
+
+        if !is_correct {
+            incorrent_guess += 1;
+        }
+        println!();
+
+    }
+
+    println!("Sorry, you ran out of guesses!");
+
 }
